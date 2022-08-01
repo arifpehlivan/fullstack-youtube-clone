@@ -17,13 +17,15 @@ const connect = () => {
     });
 }
 
-app.use("/api/users", userRoutes)
+app.use(express.json());
+
 app.use("/api/auth", authRoutes)
+app.use("/api/users", userRoutes)
 app.use("/api/videos", videoRoutes)
 app.use("/api/comments", commentRoutes)
 
-app.listen(8000,() => {
+app.listen(8800,() => {
     connect();
-    console.log(`http://localhost:8000`);
+    console.log(`http://localhost:8800`);
 })
 
