@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import VideoPhoto from "../img/1.jpg"
 import ChannelPhoto from "../img/2.jpg"
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
     width: 260px;
@@ -16,7 +17,7 @@ const Image = styled.img`
 `
 const Details = styled.div`
     display: flex;
-    margin-top: 16px;
+    margin-top: 10px;
     gap: 12px;
 `
 const ChannelImage = styled.img`
@@ -25,7 +26,9 @@ const ChannelImage = styled.img`
     border-radius: 50%;
     background: #999;
 `
-const Texts = styled.div``
+const Texts = styled.div`
+    
+`
 const Title = styled.h1`
     font-size: 16px;
     font-weight: 500;
@@ -43,6 +46,7 @@ const Info = styled.div`
 
 const Card = () => {
     return (
+        <Link to="/video/test" style={{textDecoration:"none"}}>
         <Container>
             <Image src={VideoPhoto}/>
             <Details>
@@ -54,6 +58,7 @@ const Card = () => {
                 </Texts>
             </Details>
         </Container>
+        </Link>
     )
 }
 
