@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import VideoPhoto from "../img/1.jpg"
 import ChannelPhoto from "../img/2.jpg"
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 const Container = styled.div`
     width: 260px;
