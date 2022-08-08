@@ -5,6 +5,7 @@ import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutl
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ChannelPhoto from "../img/2.jpg"
+import Comments from '../components/Comments';
 
 const Container = styled.div`
     display: flex;
@@ -67,6 +68,7 @@ const ChannelDetail = styled.div`
 `
 const ChannelName = styled.span`
     font-weight: 500;
+    color: ${({ theme }) => theme.text};
 `
 const ChannelCounter = styled.span`
     margin-top: 5px;
@@ -76,6 +78,7 @@ const ChannelCounter = styled.span`
 `
 const Decription = styled.p`
     font-size: 14px;
+    color: ${({ theme }) => theme.text};
 `
 const Subscribe = styled.button`
     font-size: 14px;
@@ -130,6 +133,8 @@ const Video = () => {
                     </ChannelInfo>
                     <Subscribe>Subscribe</Subscribe>
                 </Channel>
+                <Hr/>
+                <Comments/>
             </Content>
             <Recommendation>Recommendation</Recommendation>
         </Container>
