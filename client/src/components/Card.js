@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import VideoPhoto from "../img/1.jpg"
 import ChannelPhoto from "../img/2.jpg"
 import { Link } from "react-router-dom"
+import {format} from "timeago.js"
+import axios from "axios"
 
 const Container = styled.div`
     width: ${(props)=>props.type !== "sm" && "260px"};
@@ -49,7 +51,17 @@ const Info = styled.div`
     color: ${({theme}) => theme.textSoft};
 `
 
-const Card = ({type}) => {
+const Card = ({type, video}) => {
+    const [channel, setChannel] = useState({})
+    useEffect(() => {
+        const fetchChannel = async () => {
+            const res = await axios.get(`/users/find/${video.userId}`)
+            setChannel(res.data)
+            console.log(res.data);
+        }
+        fetchChannel()
+    },[video.userId])
+    console.log("11111",video)
     return (
         <Link to="/video/test" style={{textDecoration:"none"}}>
         <Container type={type}>
@@ -57,9 +69,9 @@ const Card = ({type}) => {
             <Details type={type}>
                 <ChannelImage type={type} src={ChannelPhoto}/>
                 <Texts>
-                    <Title>Test Video</Title>
-                    <ChannelName>React Node</ChannelName>
-                    <Info>521,635 • 1 day ago</Info>
+                    <Title>{video.title}</Title>
+                    <ChannelName>{channel.name}</ChannelName>
+                    <Info>{video.views} views • {format(video.createdAt)}</Info>
                 </Texts>
             </Details>
         </Container>
