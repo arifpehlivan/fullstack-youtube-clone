@@ -18,6 +18,7 @@ import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Container = styled.div`
     flex:1;
@@ -78,6 +79,8 @@ const Title = styled.h2`
 `
 
 export const Menu = ({ darkMode, setDarkMode }) => {
+    const { currentUser } = useSelector((state) => state.user)
+
     return (
         <Container>
             <Wrapper>
@@ -113,7 +116,7 @@ export const Menu = ({ darkMode, setDarkMode }) => {
                     History
                 </Item>
                 <Hr />
-                <Login>
+                {!currentUser &&<><Login>
                     Sign in to like videos, and subscribe.
                     <Link to="signin" style={{ textDecoration: "none" }}>
                         <Button>
@@ -122,7 +125,7 @@ export const Menu = ({ darkMode, setDarkMode }) => {
                         </Button>
                     </Link>
                 </Login>
-                <Hr />
+                <Hr /></>}
                 <Title>
                     Discover
                 </Title>
