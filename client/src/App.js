@@ -6,7 +6,7 @@ import { darkTheme, lightTheme } from "./utils/Theme.js";
 import {
   BrowserRouter,
   Routes,
-  Route,
+  Route
 } from "react-router-dom";
 import Home from "./pages/Home";
 import Video from "./pages/Video";
@@ -42,7 +42,7 @@ function App() {
                   <Route path="subscription" element={<Home type="sub"/>}/>
                   <Route path="signin" element={<Signin/>}/>
                   <Route path="video">
-                    <Route path=":id" element={<Video/>}/>
+                  <Route path=":id" element={<Video/>}/>
                   </Route>
                 </Route>
               </Routes>
