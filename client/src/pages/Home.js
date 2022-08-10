@@ -11,15 +11,16 @@ const Container = styled.div`
 
 const Home = ({type}) => {
     const [videos, setVideos] = useState([])
+    // console.log("videos",videos);
     useEffect(() => {
         const fetchVideos = async () => {
             const res = await axios.get(`/videos/${type}`)
             setVideos(res.data)
-            console.log(res.data);
+            // console.log(res.data);
         }
         fetchVideos()
     },[type])
-
+    // console.log("videos1",videos);
     return (
         <Container>
             {videos.map((video) => (

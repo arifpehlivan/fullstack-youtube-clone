@@ -42,7 +42,7 @@ function App() {
                   <Route path="subscription" element={<Home type="sub"/>}/>
                   <Route path="signin" element={<Signin/>}/>
                   <Route path="video">
-                  <Route path=":id" element={<Video/>}/>
+                    <Route path=":id" element={<Video/>}/>
                   </Route>
                 </Route>
               </Routes>

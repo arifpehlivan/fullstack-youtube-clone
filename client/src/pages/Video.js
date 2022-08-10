@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
@@ -7,6 +7,11 @@ import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ChannelPhoto from "../img/2.jpg"
 import Comments from '../components/Comments';
 import Card from '../components/Card';
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { fetchSuccess } from '../redux/videoSlice';
+import { format } from 'timeago.js';
 
 const Container = styled.div`
     display: flex;
@@ -94,6 +99,31 @@ const Subscribe = styled.button`
 `
 
 const Video = () => {
+    console.log("state",useSelector((state) => state.video));
+    const {currentUser} = useSelector((state) => state.user)
+    const {currentVideo} = useSelector((state) => state.video)
+    console.log("currentVideo",currentVideo);
+    // console.log("currentUser",currentUser);
+    // console.log("33333333333333",useSelector((state) => state.user));
+    console.log("state.video",useSelector((state) => state.video));
+    console.log("state",useSelector((state) => state));
+    const dispatch = useDispatch();
+    const path = useLocation().pathname.split("/")[2]
+    const [channel,setChannel] = useState({})
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const videoRes = await axios.get(`/videos/find/${path}`)
+                const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`)
+                setChannel(channelRes.data)
+                dispatch(fetchSuccess(videoRes.data))
+                console.log("111111111111111",videoRes.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData()
+    },[path,dispatch])
     return (
         <Container>
             <Content>
@@ -108,11 +138,11 @@ const Video = () => {
                         allowFullScreen
                     ></iframe>
                 </VideoWrapper>
-                <Title>Test Video</Title>
+                {/* <Title>{currentVideo.title}</Title> */}
                 <Details>
-                    <Info>7,948,154 views • Jun 22, 2022</Info>
+                    {/* <Info>{currentVideo.views} views • {format(currentVideo.createdAt)}</Info> */}
                     <Buttons>
-                        <Button><ThumbUpOutlinedIcon /> 123</Button>
+                        {/* <Button><ThumbUpOutlinedIcon />{currentVideo.likes?.length}</Button> */}
                         <Button><ThumbDownOffAltOutlinedIcon /> Dislike</Button>
                         <Button>
                             <ReplyOutlinedIcon /> Share
@@ -127,9 +157,9 @@ const Video = () => {
                     <ChannelInfo>
                         <Image src={ChannelPhoto}/>
                         <ChannelDetail>
-                            <ChannelName>React Node</ChannelName>
-                            <ChannelCounter>200K subscribers</ChannelCounter>
-                            <Decription>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic qui laboriosam, corrupti blanditiis recusandae consectetur beatae molestias possimus nobis! Ab.</Decription>
+                            <ChannelName>{channel.name}</ChannelName>
+                            <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
+                           {/* <Decription>{currentVideo.desc}</Decription> */}
                         </ChannelDetail>
                     </ChannelInfo>
                     <Subscribe>Subscribe</Subscribe>
@@ -137,7 +167,7 @@ const Video = () => {
                 <Hr/>
                 <Comments/>
             </Content>
-            <Recommendation>
+            {/* <Recommendation>
                 <Card type="sm"/>
                 <Card type="sm"/>
                 <Card type="sm"/>
@@ -153,7 +183,7 @@ const Video = () => {
                 <Card type="sm"/>
                 <Card type="sm"/>
                 <Card type="sm"/>
-            </Recommendation>
+            </Recommendation> */}
         </Container>
     )
 }

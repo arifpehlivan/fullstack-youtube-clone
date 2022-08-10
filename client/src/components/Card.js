@@ -52,18 +52,20 @@ const Info = styled.div`
 `
 
 const Card = ({type, video}) => {
+    // console.log(video);
     const [channel, setChannel] = useState({})
     useEffect(() => {
         const fetchChannel = async () => {
             const res = await axios.get(`/users/find/${video.userId}`)
+            // console.log(res)
             setChannel(res.data)
-            console.log(res.data);
+            // console.log(res.data);
         }
         fetchChannel()
     },[video.userId])
-    console.log("11111",video)
+    // console.log("11111",video)
     return (
-        <Link to="/video/test" style={{textDecoration:"none"}}>
+        <Link to={`/video/${video._id}`} style={{textDecoration:"none"}}>
         <Container type={type}>
             <Image type={type} src={VideoPhoto}/>
             <Details type={type}>
