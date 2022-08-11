@@ -5,6 +5,7 @@ import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutl
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ChannelPhoto from "../img/2.jpg"
+import VideoPhoto from "../img/1.jpg"
 import Comments from '../components/Comments';
 import Card from '../components/Card';
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +15,7 @@ import { dislike, fetchSuccess, like } from '../redux/videoSlice';
 import { format } from 'timeago.js';
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import { subscription } from '../redux/userSlice';
 
 const Container = styled.div`
     display: flex;
@@ -99,6 +101,11 @@ const Subscribe = styled.button`
     padding: 10px 20px;
     cursor: pointer;
 `
+const VideoFrame = styled.img`
+    max-height: 720px;
+    width: 100%;
+    object-fit: cover;
+`
 
 const Video = () => {
     console.log("state", useSelector((state) => state.video));
@@ -135,19 +142,17 @@ const Video = () => {
         await axios.put(`/users/dislike/${currentVideo._id}`)
         dispatch(dislike(currentUser._id))
     }
+    const handleSub = async () => {
+        currentUser.subscribedUsers.includes(channel._id) 
+        ? await axios.put(`/users/unsub/${channel._id}`)
+        : await axios.put(`/users/sub/${channel._id}`)
+        dispatch(subscription(channel._id))
+    }
     return (
         <Container>
             <Content>
                 <VideoWrapper>
-                    <iframe
-                        width="100%"
-                        height="600"
-                        src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                    ></iframe>
+                    <VideoFrame src={VideoPhoto}/>
                 </VideoWrapper>
                 <Title>{currentVideo.title}</Title>
                 <Details>
@@ -158,7 +163,6 @@ const Video = () => {
                                 <ThumbUpIcon />
                             ) : (<ThumbUpOutlinedIcon />)
                             }
-
                             {currentVideo.likes?.length}</Button>
                         <Button onClick={handleDislike}>
                             {currentVideo.dislikes?.includes(currentUser._id) ? (
@@ -184,7 +188,9 @@ const Video = () => {
                             {/* <Decription>{currentVideo.desc}</Decription> */}
                         </ChannelDetail>
                     </ChannelInfo>
-                    <Subscribe>Subscribe</Subscribe>
+                    <Subscribe onClick={handleSub}>
+                        {currentUser.subscribedUsers?.includes(channel._id) ? "SUBSCRIBED" : "SUBSCRIBE"}
+                    </Subscribe>
                 </Channel>
                 <Hr />
                 <Comments />
