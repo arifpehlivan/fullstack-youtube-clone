@@ -10,8 +10,10 @@ import Card from '../components/Card';
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { fetchSuccess } from '../redux/videoSlice';
+import { dislike, fetchSuccess, like } from '../redux/videoSlice';
 import { format } from 'timeago.js';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 const Container = styled.div`
     display: flex;
@@ -99,17 +101,17 @@ const Subscribe = styled.button`
 `
 
 const Video = () => {
-    console.log("state",useSelector((state) => state.video));
-    const {currentUser} = useSelector((state) => state.user)
-    const {currentVideo} = useSelector((state) => state.video)
-    console.log("currentVideo",currentVideo);
+    console.log("state", useSelector((state) => state.video));
+    const { currentUser } = useSelector((state) => state.user)
+    const { currentVideo } = useSelector((state) => state.video)
+    console.log("currentVideo", currentVideo);
     // console.log("currentUser",currentUser);
     // console.log("33333333333333",useSelector((state) => state.user));
-    console.log("state.video",useSelector((state) => state.video));
-    console.log("state",useSelector((state) => state));
+    console.log("state.video", useSelector((state) => state.video));
+    console.log("state", useSelector((state) => state));
     const dispatch = useDispatch();
     const path = useLocation().pathname.split("/")[2]
-    const [channel,setChannel] = useState({})
+    const [channel, setChannel] = useState({})
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -117,13 +119,22 @@ const Video = () => {
                 const channelRes = await axios.get(`/users/find/${videoRes.data.userId}`)
                 setChannel(channelRes.data)
                 dispatch(fetchSuccess(videoRes.data))
-                console.log("111111111111111",videoRes.data);
+                console.log("111111111111111", videoRes.data);
             } catch (err) {
                 console.log(err);
             }
         }
         fetchData()
-    },[path,dispatch])
+    }, [path, dispatch])
+
+    const handleLike = async () => {
+        await axios.put(`/users/like/${currentVideo._id}`)
+        dispatch(like(currentUser._id))
+    }
+    const handleDislike = async () => {
+        await axios.put(`/users/dislike/${currentVideo._id}`)
+        dispatch(dislike(currentUser._id))
+    }
     return (
         <Container>
             <Content>
@@ -138,12 +149,23 @@ const Video = () => {
                         allowFullScreen
                     ></iframe>
                 </VideoWrapper>
-                {/* <Title>{currentVideo.title}</Title> */}
+                <Title>{currentVideo.title}</Title>
                 <Details>
-                    {/* <Info>{currentVideo.views} views • {format(currentVideo.createdAt)}</Info> */}
+                    <Info>{currentVideo.views} views • {format(currentVideo.createdAt)}</Info>
                     <Buttons>
-                        {/* <Button><ThumbUpOutlinedIcon />{currentVideo.likes?.length}</Button> */}
-                        <Button><ThumbDownOffAltOutlinedIcon /> Dislike</Button>
+                        <Button onClick={handleLike}>
+                            {currentVideo.likes?.includes(currentUser._id) ? (
+                                <ThumbUpIcon />
+                            ) : (<ThumbUpOutlinedIcon />)
+                            }
+
+                            {currentVideo.likes?.length}</Button>
+                        <Button onClick={handleDislike}>
+                            {currentVideo.dislikes?.includes(currentUser._id) ? (
+                                <ThumbDownIcon />
+                            ) : (<ThumbDownOffAltOutlinedIcon />)
+                            }
+                            Dislike</Button>
                         <Button>
                             <ReplyOutlinedIcon /> Share
                         </Button>
@@ -152,20 +174,20 @@ const Video = () => {
                         </Button>
                     </Buttons>
                 </Details>
-                <Hr/>
+                <Hr />
                 <Channel>
                     <ChannelInfo>
-                        <Image src={ChannelPhoto}/>
+                        <Image src={ChannelPhoto} />
                         <ChannelDetail>
                             <ChannelName>{channel.name}</ChannelName>
                             <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
-                           {/* <Decription>{currentVideo.desc}</Decription> */}
+                            {/* <Decription>{currentVideo.desc}</Decription> */}
                         </ChannelDetail>
                     </ChannelInfo>
                     <Subscribe>Subscribe</Subscribe>
                 </Channel>
-                <Hr/>
-                <Comments/>
+                <Hr />
+                <Comments />
             </Content>
             {/* <Recommendation>
                 <Card type="sm"/>
