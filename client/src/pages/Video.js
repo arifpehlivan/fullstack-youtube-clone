@@ -16,6 +16,7 @@ import { format } from 'timeago.js';
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { subscription } from '../redux/userSlice';
+import Recommendation from '../components/Recommendation';
 
 const Container = styled.div`
     display: flex;
@@ -179,7 +180,7 @@ const Video = () => {
                         <ChannelDetail>
                             <ChannelName>{channel.name}</ChannelName>
                             <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
-                            {/* <Decription>{currentVideo.desc}</Decription> */}
+                            <Decription>{currentVideo.desc}</Decription>
                         </ChannelDetail>
                     </ChannelInfo>
                     <Subscribe onClick={handleSub}>
@@ -189,23 +190,7 @@ const Video = () => {
                 <Hr />
                 <Comments videoId={currentVideo._id}/>
             </Content>
-            {/* <Recommendation>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-                <Card type="sm"/>
-            </Recommendation> */}
+            <Recommendation tags={currentVideo.tags}/>
         </Container>
     )
 }
