@@ -55,9 +55,6 @@ const Hr = styled.hr`
     margin: 15px 0px;
     border: 0.5px solid ${({ theme }) => theme.soft};
 `
-const Recommendation = styled.div`
-    flex: 2;
-`
 const Channel = styled.div`
     display: flex;
     justify-content: space-between;
@@ -108,12 +105,9 @@ const VideoFrame = styled.img`
 `
 
 const Video = () => {
-    console.log("state", useSelector((state) => state.video));
     const { currentUser } = useSelector((state) => state.user)
     const { currentVideo } = useSelector((state) => state.video)
     console.log("currentVideo", currentVideo);
-    // console.log("currentUser",currentUser);
-    // console.log("33333333333333",useSelector((state) => state.user));
     console.log("state.video", useSelector((state) => state.video));
     console.log("state", useSelector((state) => state));
     const dispatch = useDispatch();
@@ -152,7 +146,7 @@ const Video = () => {
         <Container>
             <Content>
                 <VideoWrapper>
-                    <VideoFrame src={VideoPhoto}/>
+                    <VideoFrame src={VideoPhoto} controls/>
                 </VideoWrapper>
                 <Title>{currentVideo.title}</Title>
                 <Details>

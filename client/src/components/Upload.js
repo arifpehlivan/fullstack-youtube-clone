@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import app from "../firebase"
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     width: 100%;
@@ -62,12 +64,13 @@ const Label = styled.label`
 `
 
 const Upload = ({ setOpen }) => {
-    const [img, setImg] = useState(null)
-    const [video, setVideo] = useState(null)
+    const [img, setImg] = useState(undefined)
+    const [video, setVideo] = useState(undefined)
     const [imgPerc, setImgPerc] = useState(0)
     const [videoPerc, setVideoPerc] = useState(0)
-    const [inputs, setInputs] = useState(0)
+    const [inputs, setInputs] = useState({})
     const [tags, setTags] = useState([])
+    const navigate = useNavigate()
     const handleChange = (e) => {
         setInputs((prev) => {
             return { ...prev, [e.target.name]: e.target.value }
@@ -97,7 +100,9 @@ const Upload = ({ setOpen }) => {
                         break
                 }
             },
-            (error) => { },
+            (error) => { 
+                console.log(error);
+            },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     setInputs((prev) => {
@@ -113,16 +118,22 @@ const Upload = ({ setOpen }) => {
     useEffect(() => {
         img && uploadFile(img, "imgUrl")
     }, [img])
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        const res = await axios.post("/videos", { ...inputs, tags })
+        setOpen(false)
+        res.status === 200 && navigate(`/video/${res.data._id}`)
+    }
     return (
         <Container>
             <Wrapper>
                 <Close onClick={() => { setOpen(false) }}>X</Close>
                 <Title>Upload a new video</Title>
                 <Label>Video:</Label>
-                {videoPerc>0 ? ("Uploading:"+ videoPerc + "%") : (<Input
+                {videoPerc > 0 ? ("Uploading:" + videoPerc + "%") : (<Input
                     type="file"
                     accept='video/*'
-                    onChange={e => setVideo(e.target.files[0])}
+                    onChange={(e) => setVideo(e.target.files[0])}
                 />)}
                 <Input
                     type="text"
@@ -141,13 +152,13 @@ const Upload = ({ setOpen }) => {
                     placeholder='Seperate the tags with commas.'
                     onChange={handleTags} />
                 <Label>Image:</Label>
-                {imgPerc>0 ? ("Uploading:"+ imgPerc + "%") : (
-                <Input
-                    type="file"
-                    accept='image/*'
-                    onChange={e => setImg(e.target.files[0])}
-                />)}
-                <Button>Upload</Button>
+                {imgPerc > 0 ? ("Uploading:" + imgPerc + "%") : (
+                    <Input
+                        type="file"
+                        accept='image/*'
+                        onChange={(e) => setImg(e.target.files[0])}
+                    />)}
+                <Button onClick={handleUpload}>Upload</Button>
             </Wrapper>
         </Container>
     )
