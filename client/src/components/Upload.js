@@ -71,6 +71,7 @@ const Upload = ({ setOpen }) => {
     const [inputs, setInputs] = useState({})
     const [tags, setTags] = useState([])
     const navigate = useNavigate()
+    console.log(video)
     const handleChange = (e) => {
         setInputs((prev) => {
             return { ...prev, [e.target.name]: e.target.value }
@@ -82,7 +83,7 @@ const Upload = ({ setOpen }) => {
     const uploadFile = (file, urlType) => {
         const storage = getStorage(app);
         const fileName = new Date().getTime() + file.name
-        const storageRef = ref(storage, + fileName);
+        const storageRef = ref(storage, fileName);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         uploadTask.on('state_changed',
