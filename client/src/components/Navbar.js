@@ -3,7 +3,7 @@ import styled from "styled-components"
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined"
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux"
 import Photo from "../img/2.jpg"
 import Upload from './Upload';
@@ -69,15 +69,17 @@ const Avatar = styled.img`
 `
 
 export const Navbar = () => {
+    const navigate = useNavigate()
     const [open, setOpen] = useState(false)
+    const [q, setQ] = useState("")
     const { currentUser } = useSelector((state) => state.user)
     return (
         <>
             <Container>
                 <Wrapper>
                     <Search>
-                        <Input placeholder='Search' />
-                        <SearchOutlinedIcon />
+                        <Input placeholder='Search' onChange={(e)=>setQ(e.target.value)}/>
+                        <SearchOutlinedIcon onClick={()=>navigate(`/search?q=${q}`)} style={{cursor:"pointer"}}/>
                     </Search>
                     {currentUser ? (
                         <User>
